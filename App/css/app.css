@@ -1,0 +1,26 @@
+.align_center{
+  text-align: center;
+}
+.container{
+  margin: auto;
+  max-width: 800px;
+}
+.content-split{
+  display: block;
+  max-width: 400px;
+  width: 50%;
+}
+._right{
+  float: right;
+}
+
+._left{
+  float:left;
+}
+
+.align_left{
+  text-align: left;
+}
+.align_right{
+  text-align: right;
+}
