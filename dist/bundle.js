@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "c3b7beff772fab41ff33"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "3fbe8ed8bffcddb8f23b"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -8017,6 +8017,8 @@
 	
 	__webpack_require__(307);
 	
+	__webpack_require__(309);
+	
 	var RouteHandler = _reactRouter2['default'].RouteHandler;
 	
 	var App = (function (_React$Component) {
@@ -8283,7 +8285,7 @@
 	
 	//React.render(<HomePage service={cantiqueService}/>, document.body);
 
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(309); if (makeExportsHot(module, __webpack_require__(123))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(310); if (makeExportsHot(module, __webpack_require__(123))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)(module)))
 
 /***/ },
@@ -33391,10 +33393,81 @@
 /* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(59), RootInstanceProvider = __webpack_require__(67), ReactMount = __webpack_require__(69), React = __webpack_require__(123); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+	
+	"use strict";
+	
+	cantiqueService = (function () {
+	
+	    var findById = function findById(id) {
+	        var deferred = $.Deferred();
+	        var cantique = null;
+	        var l = cantiques.length;
+	        for (var i = 0; i < l; i++) {
+	            console.log(cantiques[i].id == parseInt(id));
+	            if (parseInt(cantiques[i].id) == parseInt(id)) {
+	                cantique = cantiques[i];
+	                break;
+	            }
+	        }
+	        deferred.resolve(cantique);
+	        return deferred.promise();
+	    },
+	        findByTitle = function findByTitle(searchKey) {
+	        var deferred = $.Deferred();
+	        var results = cantiques.filter(function (element) {
+	            return element.title.toLowerCase().indexOf(searchKey.toLowerCase()) > -1;
+	        });
+	        deferred.resolve(results);
+	        return deferred.promise();
+	    },
+	        findByContent = function findByContent(searchKey) {
+	        var deferred = $.Deferred();
+	        var results = cantiques.filter(function (element) {
+	            return element.content.toLowerCase().indexOf(searchKey.toLowerCase()) > -1;
+	        });
+	        deferred.resolve(results);
+	        return deferred.promise();
+	    },
+	        findByNum = function findByNum(searchKey) {
+	        var deferred = $.Deferred();
+	        var results = cantiques.filter(function (element) {
+	            return element.id.toString().indexOf(searchKey) > -1;
+	        });
+	        deferred.resolve(results);
+	        return deferred.promise();
+	    },
+	        cantiques = [{ "id": 813, "title": "Tia zaza",
+	        "content": "Tia zaza tia zaza ny jesosy nay",
+	        "trad": "Voici le jour que Dieu a créer"
+	    }, { "id": 224, "title": "Tafavory izahay",
+	        "content": "Tafavory izahay, bla bla bla bla",
+	        "trad": "Voici le jour que Dieu a créer"
+	    }, { "id": 175, "title": "Avia fanahy masina o",
+	        "content": "Avia fanahy masina o, aminay",
+	        "trad": "Voici le jour que Dieu a créer"
+	    }];
+	
+	    // The public API
+	    return {
+	        findById: findById,
+	        findByTitle: findByTitle,
+	        findByContent: findByContent,
+	        findByNum: findByNum
+	    };
+	})();
+	
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(310); if (makeExportsHot(module, __webpack_require__(123))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "cantiqueService.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)(module)))
+
+/***/ },
+/* 310 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	
-	var isReactClassish = __webpack_require__(310),
-	    isReactElementish = __webpack_require__(311);
+	var isReactClassish = __webpack_require__(311),
+	    isReactElementish = __webpack_require__(312);
 	
 	function makeExportsHot(m, React) {
 	  if (isReactElementish(m.exports, React)) {
@@ -33448,7 +33521,7 @@
 
 
 /***/ },
-/* 310 */
+/* 311 */
 /***/ function(module, exports) {
 
 	function hasRender(Class) {
@@ -33498,10 +33571,10 @@
 	module.exports = isReactClassish;
 
 /***/ },
-/* 311 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isReactClassish = __webpack_require__(310);
+	var isReactClassish = __webpack_require__(311);
 	
 	function isReactElementish(obj, React) {
 	  if (!obj) {

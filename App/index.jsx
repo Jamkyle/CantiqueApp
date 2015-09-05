@@ -18,16 +18,20 @@ class HomePage extends React.Component{
   constructor(props){
     super(props);
     this.service = {cantiqueService};
-    this.state = {cantiques : [], sel : 1, cantique: {}};
+    this.state = {cantiques : [], sel : 1};
     this.handler = this.handler.bind(this);
    }
+   changeChoice(e){
+     this.setState({sel: e});
+   }
    handler(key) {
-     if(this.state.sel===0){
+     console.log(this.state.sel);
+     if(this.state.sel==0){
         this.service.cantiqueService.findByContent(key).done(function(result) {
           this.setState({ searchKey: key, cantiques: result});
         }.bind(this));
     }
-    if(this.state.sel===1){
+    if(this.state.sel==1){
       this.service.cantiqueService.findByNum(key).done(function(result) {
         this.setState({searchKey: key, cantiques: result});
       }.bind(this));
@@ -35,17 +39,42 @@ class HomePage extends React.Component{
   }
   render(){
   return  (
+
     <div >
       <Header title='Home Page'/>
       <div className="content">
         <SearchBar handler={this.handler}/>
+        <Choix value={this.state.sel} onChoice={this.changeChoice.bind(this)}/>
         <ListResult cantiques={this.state.cantiques} />
       </div>
     </div>);
   }
 }
 
+class Choix extends React.Component{
+  constructor(props){
+    super(props);
+    this.onChoice = this.onChoice.bind(this);
+
+  }
+  onChoice(e){
+    this.props.onChoice(e.target.value)
+  }
+  render(){
+    return  <div className='pull-right'>
+        <select onChange={this.onChoice}>
+          <option value='1'>num</option>
+          <option value='0'>content</option>
+        </select>
+      </div>
+
+  }
+
+}
+
 class Header extends React.Component{
+
+
   render(){
     return(
   <Ratchet.NavBar>
@@ -53,6 +82,7 @@ class Header extends React.Component{
       {this.props.title}
     </Ratchet.Title>
     <Ratchet.NavButton pull-left href="/" className='btn-link'>Back</Ratchet.NavButton>
+
   </Ratchet.NavBar>
   );
   }
