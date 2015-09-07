@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "3fbe8ed8bffcddb8f23b"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "0c1edf8f081d98e7e3c5"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -8017,8 +8017,6 @@
 	
 	__webpack_require__(307);
 	
-	__webpack_require__(309);
-	
 	var RouteHandler = _reactRouter2['default'].RouteHandler;
 	
 	var App = (function (_React$Component) {
@@ -8048,19 +8046,24 @@
 	
 	    _get(Object.getPrototypeOf(HomePage.prototype), 'constructor', this).call(this, props);
 	    this.service = { cantiqueService: cantiqueService };
-	    this.state = { cantiques: [], sel: 1, cantique: {} };
+	    this.state = { cantiques: [], sel: 1 };
 	    this.handler = this.handler.bind(this);
 	  }
 	
 	  _createClass(HomePage, [{
+	    key: 'changeChoice',
+	    value: function changeChoice(e) {
+	      this.setState({ sel: e });
+	    }
+	  }, {
 	    key: 'handler',
 	    value: function handler(key) {
-	      if (this.state.sel === 0) {
+	      if (this.state.sel == 0) {
 	        this.service.cantiqueService.findByContent(key).done((function (result) {
 	          this.setState({ searchKey: key, cantiques: result });
 	        }).bind(this));
 	      }
-	      if (this.state.sel === 1) {
+	      if (this.state.sel == 1) {
 	        this.service.cantiqueService.findByNum(key).done((function (result) {
 	          this.setState({ searchKey: key, cantiques: result });
 	        }).bind(this));
@@ -8077,6 +8080,7 @@
 	          'div',
 	          { className: 'content' },
 	          _react2['default'].createElement(SearchBar, { handler: this.handler }),
+	          _react2['default'].createElement(Choix, { value: this.state.sel, onChoice: this.changeChoice.bind(this) }),
 	          _react2['default'].createElement(ListResult, { cantiques: this.state.cantiques })
 	        )
 	      );
@@ -8086,8 +8090,50 @@
 	  return HomePage;
 	})(_react2['default'].Component);
 	
-	var Header = (function (_React$Component3) {
-	  _inherits(Header, _React$Component3);
+	var Choix = (function (_React$Component3) {
+	  _inherits(Choix, _React$Component3);
+	
+	  function Choix(props) {
+	    _classCallCheck(this, Choix);
+	
+	    _get(Object.getPrototypeOf(Choix.prototype), 'constructor', this).call(this, props);
+	    this.onChoice = this.onChoice.bind(this);
+	  }
+	
+	  _createClass(Choix, [{
+	    key: 'onChoice',
+	    value: function onChoice(e) {
+	      this.props.onChoice(e.target.value);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'pull-right' },
+	        _react2['default'].createElement(
+	          'select',
+	          { onChange: this.onChoice },
+	          _react2['default'].createElement(
+	            'option',
+	            { value: '1' },
+	            'num'
+	          ),
+	          _react2['default'].createElement(
+	            'option',
+	            { value: '0' },
+	            'content'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Choix;
+	})(_react2['default'].Component);
+	
+	var Header = (function (_React$Component4) {
+	  _inherits(Header, _React$Component4);
 	
 	  function Header() {
 	    _classCallCheck(this, Header);
@@ -8107,9 +8153,13 @@
 	          this.props.title
 	        ),
 	        _react2['default'].createElement(
-	          _reactRatchet2['default'].NavButton,
-	          { 'pull-left': true, href: '/', className: 'btn-link' },
-	          'Back'
+	          _reactRouter.Link,
+	          { to: "/" },
+	          _react2['default'].createElement(
+	            _reactRatchet2['default'].NavButton,
+	            { 'pull-left': true, className: 'btn-link' },
+	            'Back'
+	          )
 	        )
 	      );
 	    }
@@ -8118,13 +8168,13 @@
 	  return Header;
 	})(_react2['default'].Component);
 	
-	var SearchBar = (function (_React$Component4) {
-	  _inherits(SearchBar, _React$Component4);
+	var SearchBar = (function (_React$Component5) {
+	  _inherits(SearchBar, _React$Component5);
 	
-	  function SearchBar() {
+	  function SearchBar(props) {
 	    _classCallCheck(this, SearchBar);
 	
-	    _get(Object.getPrototypeOf(SearchBar.prototype), 'constructor', this).call(this);
+	    _get(Object.getPrototypeOf(SearchBar.prototype), 'constructor', this).call(this, props);
 	    this.state = { searchKey: "" };
 	    this.handler = this.handler.bind(this);
 	  }
@@ -8139,15 +8189,15 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return _react2['default'].createElement('input', { type: 'search', value: this.state.symbol, placeholder: 'Search', onChange: this.handler });
+	      return _react2['default'].createElement('input', { type: 'search', value: this.state.searchKey, placeholder: 'Cherche un cantique', onChange: this.handler });
 	    }
 	  }]);
 	
 	  return SearchBar;
 	})(_react2['default'].Component);
 	
-	var ListCantique = (function (_React$Component5) {
-	  _inherits(ListCantique, _React$Component5);
+	var ListCantique = (function (_React$Component6) {
+	  _inherits(ListCantique, _React$Component6);
 	
 	  function ListCantique() {
 	    _classCallCheck(this, ListCantique);
@@ -8175,8 +8225,8 @@
 	  return ListCantique;
 	})(_react2['default'].Component);
 	
-	var ListResult = (function (_React$Component6) {
-	  _inherits(ListResult, _React$Component6);
+	var ListResult = (function (_React$Component7) {
+	  _inherits(ListResult, _React$Component7);
 	
 	  function ListResult() {
 	    _classCallCheck(this, ListResult);
@@ -8203,62 +8253,43 @@
 	  return ListResult;
 	})(_react2['default'].Component);
 	
-	var Cantique = (function (_React$Component7) {
-	  _inherits(Cantique, _React$Component7);
+	var Cantique = (function (_React$Component8) {
+	  _inherits(Cantique, _React$Component8);
 	
 	  function Cantique() {
 	    _classCallCheck(this, Cantique);
 	
 	    _get(Object.getPrototypeOf(Cantique.prototype), 'constructor', this).call(this);
 	    this.service = { cantiqueService: cantiqueService };
-	    this.state = { cantique: {} };
+	    this.state = { cantique: {}, strophes: [] };
 	  }
 	
 	  _createClass(Cantique, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.service.cantiqueService.findById(this.props.params.cantiqueId).done((function (result) {
-	        this.setState({ cantique: result });
+	        this.setState({ cantique: result, strophes: result.strophe });
 	      }).bind(this));
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	
+	      var content = this.state.strophes.map(function (strophe, i) {
+	        return _react2['default'].createElement(Strophe, { key: i, strophe: strophe });
+	      });
+	
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
-	        _react2['default'].createElement(Header, { title: 'Cantique' }),
+	        _react2['default'].createElement(Header, { title: this.state.cantique.id + ". " + this.state.cantique.title }),
 	        _react2['default'].createElement(
 	          'div',
 	          { className: 'content align_center' },
 	          _react2['default'].createElement(
-	            'h2',
-	            { className: 'content-padded' },
-	            this.state.cantique.id,
-	            '.- ',
-	            this.state.cantique.title
-	          ),
-	          _react2['default'].createElement(
 	            'div',
 	            { className: 'container' },
-	            _react2['default'].createElement(
-	              'div',
-	              { className: 'content-split _left align_right' },
-	              _react2['default'].createElement(
-	                'p',
-	                { className: 'content-padded' },
-	                this.state.cantique.content
-	              )
-	            ),
-	            _react2['default'].createElement(
-	              'div',
-	              { className: 'content-split _right align_left' },
-	              _react2['default'].createElement(
-	                'p',
-	                { className: 'content-padded' },
-	                this.state.cantique.trad
-	              )
-	            )
+	            content
 	          )
 	        )
 	      );
@@ -8268,9 +8299,75 @@
 	  return Cantique;
 	})(_react2['default'].Component);
 	
+	var Strophe = (function (_React$Component9) {
+	  _inherits(Strophe, _React$Component9);
+	
+	  function Strophe() {
+	    _classCallCheck(this, Strophe);
+	
+	    _get(Object.getPrototypeOf(Strophe.prototype), 'constructor', this).apply(this, arguments);
+	  }
+	
+	  _createClass(Strophe, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        _react2['default'].createElement(
+	          'h2',
+	          { className: 'content-padded clearfix' },
+	          this.props.strophe.sid
+	        ),
+	        _react2['default'].createElement(
+	          'p',
+	          { className: 'content-padded content-split _left' },
+	          this.props.strophe.content
+	        ),
+	        _react2['default'].createElement(
+	          'p',
+	          { className: 'content-padded content-split _right' },
+	          this.props.strophe.trad
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Strophe;
+	})(_react2['default'].Component);
+	
+	var Stropheimg = (function (_React$Component10) {
+	  _inherits(Stropheimg, _React$Component10);
+	
+	  function Stropheimg() {
+	    _classCallCheck(this, Stropheimg);
+	
+	    _get(Object.getPrototypeOf(Stropheimg.prototype), 'constructor', this).apply(this, arguments);
+	  }
+	
+	  _createClass(Stropheimg, [{
+	    key: 'render',
+	    // strophe par image
+	    value: function render() {
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        _react2['default'].createElement(
+	          'h2',
+	          { className: 'content-padded clearfix' },
+	          this.props.strophe.sid
+	        ),
+	        _react2['default'].createElement('img', { src: '' + this.props.strophe.content + '', width: '400', height: '300' })
+	      );
+	    }
+	  }]);
+	
+	  return Stropheimg;
+	})(_react2['default'].Component);
+	
 	var routes = _react2['default'].createElement(
 	  _reactRouter.Route,
-	  { name: 'app', path: '/', handler: App },
+	  { name: 'app', path: '', handler: App },
 	  _react2['default'].createElement(_reactRouter.Route, { name: 'home', path: '/', handler: HomePage }),
 	  _react2['default'].createElement(
 	    _reactRouter.Route,
@@ -8285,7 +8382,7 @@
 	
 	//React.render(<HomePage service={cantiqueService}/>, document.body);
 
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(310); if (makeExportsHot(module, __webpack_require__(123))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(309); if (makeExportsHot(module, __webpack_require__(123))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)(module)))
 
 /***/ },
@@ -33384,7 +33481,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".align_center{\r\n  text-align: center;\r\n}\r\n.container{\r\n  margin: auto;\r\n  max-width: 800px;\r\n}\r\n.content-split{\r\n  display: block;\r\n  max-width: 400px;\r\n  width: 50%;\r\n}\r\n._right{\r\n  float: right;\r\n}\r\n\r\n._left{\r\n  float:left;\r\n}\r\n\r\n.align_left{\r\n  text-align: left;\r\n}\r\n.align_right{\r\n  text-align: right;\r\n}\r\n", ""]);
+	exports.push([module.id, ".align_center{\r\n  text-align: center;\r\n}\r\n.container{\r\n  margin: auto;\r\n  max-width: 600px;\r\n}\r\n.content-split{\r\n  display: block;\r\n  max-width: 250px;\r\n  width: 50%;\r\n}\r\n._right{\r\n  float: right;\r\n}\r\n\r\n._left{\r\n  float:left;\r\n}\r\n\r\n.align_left{\r\n  text-align: left;\r\n}\r\n.align_right{\r\n  text-align: right;\r\n}\r\n.clearfix{\r\n  clear: both;\r\n}\r\n", ""]);
 	
 	// exports
 
@@ -33393,81 +33490,10 @@
 /* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(59), RootInstanceProvider = __webpack_require__(67), ReactMount = __webpack_require__(69), React = __webpack_require__(123); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-	
-	"use strict";
-	
-	cantiqueService = (function () {
-	
-	    var findById = function findById(id) {
-	        var deferred = $.Deferred();
-	        var cantique = null;
-	        var l = cantiques.length;
-	        for (var i = 0; i < l; i++) {
-	            console.log(cantiques[i].id == parseInt(id));
-	            if (parseInt(cantiques[i].id) == parseInt(id)) {
-	                cantique = cantiques[i];
-	                break;
-	            }
-	        }
-	        deferred.resolve(cantique);
-	        return deferred.promise();
-	    },
-	        findByTitle = function findByTitle(searchKey) {
-	        var deferred = $.Deferred();
-	        var results = cantiques.filter(function (element) {
-	            return element.title.toLowerCase().indexOf(searchKey.toLowerCase()) > -1;
-	        });
-	        deferred.resolve(results);
-	        return deferred.promise();
-	    },
-	        findByContent = function findByContent(searchKey) {
-	        var deferred = $.Deferred();
-	        var results = cantiques.filter(function (element) {
-	            return element.content.toLowerCase().indexOf(searchKey.toLowerCase()) > -1;
-	        });
-	        deferred.resolve(results);
-	        return deferred.promise();
-	    },
-	        findByNum = function findByNum(searchKey) {
-	        var deferred = $.Deferred();
-	        var results = cantiques.filter(function (element) {
-	            return element.id.toString().indexOf(searchKey) > -1;
-	        });
-	        deferred.resolve(results);
-	        return deferred.promise();
-	    },
-	        cantiques = [{ "id": 813, "title": "Tia zaza",
-	        "content": "Tia zaza tia zaza ny jesosy nay",
-	        "trad": "Voici le jour que Dieu a créer"
-	    }, { "id": 224, "title": "Tafavory izahay",
-	        "content": "Tafavory izahay, bla bla bla bla",
-	        "trad": "Voici le jour que Dieu a créer"
-	    }, { "id": 175, "title": "Avia fanahy masina o",
-	        "content": "Avia fanahy masina o, aminay",
-	        "trad": "Voici le jour que Dieu a créer"
-	    }];
-	
-	    // The public API
-	    return {
-	        findById: findById,
-	        findByTitle: findByTitle,
-	        findByContent: findByContent,
-	        findByNum: findByNum
-	    };
-	})();
-	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(310); if (makeExportsHot(module, __webpack_require__(123))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "cantiqueService.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)(module)))
-
-/***/ },
-/* 310 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 	
-	var isReactClassish = __webpack_require__(311),
-	    isReactElementish = __webpack_require__(312);
+	var isReactClassish = __webpack_require__(310),
+	    isReactElementish = __webpack_require__(311);
 	
 	function makeExportsHot(m, React) {
 	  if (isReactElementish(m.exports, React)) {
@@ -33521,7 +33547,7 @@
 
 
 /***/ },
-/* 311 */
+/* 310 */
 /***/ function(module, exports) {
 
 	function hasRender(Class) {
@@ -33571,10 +33597,10 @@
 	module.exports = isReactClassish;
 
 /***/ },
-/* 312 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isReactClassish = __webpack_require__(311);
+	var isReactClassish = __webpack_require__(310);
 	
 	function isReactElementish(obj, React) {
 	  if (!obj) {

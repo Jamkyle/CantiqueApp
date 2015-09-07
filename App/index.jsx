@@ -77,7 +77,7 @@ class Header extends React.Component{
         <Ratchet.Title>
           {this.props.title}
         </Ratchet.Title>
-        <Ratchet.NavButton pull-left href="/" className='btn-link'>Back</Ratchet.NavButton>
+        <Link to={"/"}><Ratchet.NavButton pull-left className='btn-link'>Back</Ratchet.NavButton></Link>
       </Ratchet.NavBar>
     );
   }
@@ -117,7 +117,7 @@ class ListCantique extends React.Component{
 class ListResult extends React.Component {
   render(){
     var items = this.props.cantiques.map(function(cantique){
-      return (<ListCantique cantique={cantique}/>);
+      return (<ListCantique key={cantique.id} cantique={cantique}/>);
     });
     return (
       <ul>
@@ -144,7 +144,7 @@ class Cantique extends React.Component{
     render() {
 
       var content = this.state.strophes.map(function(strophe,i){
-          return <Strophe strophe={strophe}/>
+          return <Strophe key={i} strophe={strophe}/>
         });
 
         return (
@@ -185,7 +185,7 @@ class Stropheimg extends React.Component{ // strophe par image
 
 
 var routes =(
-  <Route name="app" path="/" handler={App}>
+  <Route name="app" path="" handler={App}>
     <Route name='home' path='/' handler={HomePage}/>
     <Route name='cantique' path="cantique" handler={Cantique}>
       <Route path="/cantique/:cantiqueId" handler={Cantique} />
