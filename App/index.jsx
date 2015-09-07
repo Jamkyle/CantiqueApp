@@ -22,10 +22,9 @@ class HomePage extends React.Component{
     this.handler = this.handler.bind(this);
    }
    changeChoice(e){
-     this.setState({sel: e});
+      this.setState({sel: e});
    }
    handler(key) {
-     console.log(this.state.sel);
      if(this.state.sel==0){
         this.service.cantiqueService.findByContent(key).done(function(result) {
           this.setState({ searchKey: key, cantiques: result});
@@ -43,7 +42,7 @@ class HomePage extends React.Component{
     <div >
       <Header title='Home Page'/>
       <div className="content">
-        <SearchBar handler={this.handler}/>
+        <SearchBar handler={this.handler} />
         <Choix value={this.state.sel} onChoice={this.changeChoice.bind(this)}/>
         <ListResult cantiques={this.state.cantiques} />
       </div>
@@ -55,7 +54,6 @@ class Choix extends React.Component{
   constructor(props){
     super(props);
     this.onChoice = this.onChoice.bind(this);
-
   }
   onChoice(e){
     this.props.onChoice(e.target.value)
@@ -73,25 +71,22 @@ class Choix extends React.Component{
 }
 
 class Header extends React.Component{
-
-
   render(){
     return(
-  <Ratchet.NavBar>
-    <Ratchet.Title>
-      {this.props.title}
-    </Ratchet.Title>
-    <Ratchet.NavButton pull-left href="/" className='btn-link'>Back</Ratchet.NavButton>
-
-  </Ratchet.NavBar>
-  );
+      <Ratchet.NavBar>
+        <Ratchet.Title>
+          {this.props.title}
+        </Ratchet.Title>
+        <Ratchet.NavButton pull-left href="/" className='btn-link'>Back</Ratchet.NavButton>
+      </Ratchet.NavBar>
+    );
   }
 
 }
 class SearchBar extends React.Component{
-  constructor(){
-    super();
-    this.state = {searchKey: ""};
+  constructor(props){
+    super(props);
+    this.state = {searchKey: ""}
     this.handler = this.handler.bind(this);
   }
 
@@ -103,7 +98,7 @@ class SearchBar extends React.Component{
 
   render(){
     return (
-        <input type='search' value={this.state.symbol} placeholder='Search' onChange={this.handler} />
+        <input type='search' value={this.state.searchKey} placeholder='Cherche un cantique' onChange={this.handler} />
     );
   }
 }
@@ -118,10 +113,11 @@ class ListCantique extends React.Component{
           );
   }
 }
+
 class ListResult extends React.Component {
   render(){
     var items = this.props.cantiques.map(function(cantique){
-      return (<ListCantique key={cantique.id} cantique={cantique} />);
+      return (<ListCantique cantique={cantique}/>);
     });
     return (
       <ul>
@@ -137,35 +133,62 @@ class Cantique extends React.Component{
     constructor() {
       super();
       this.service = {cantiqueService};
-        this.state = {cantique: {}};
+      this.state = {cantique: {}, strophes : []};
+
     }
     componentDidMount(){
         this.service.cantiqueService.findById(this.props.params.cantiqueId).done(function(result) {
-          this.setState({cantique: result});
+          this.setState({cantique: result, strophes: result.strophe});
         }.bind(this));
     }
     render() {
+
+      var content = this.state.strophes.map(function(strophe,i){
+          return <Strophe strophe={strophe}/>
+        });
+
         return (
           <div >
-            <Header title='Cantique'/>
+            <Header title={this.state.cantique.id+". "+this.state.cantique.title}/>
             <div className="content align_center">
-              <h2 className='content-padded'>{this.state.cantique.id}.- {this.state.cantique.title}</h2>
               <div className='container'>
-                <div className='content-split _left align_right'><p className='content-padded'>{this.state.cantique.content }</p></div>
-                <div className='content-split _right align_left'><p className='content-padded'>{this.state.cantique.trad}</p></div>
+                {content}
               </div>
-
             </div>
           </div>
           );
     }
 }
 
+class Strophe extends React.Component{
+  render(){
+    return(
+      <div>
+        <h2 className='content-padded clearfix'>{this.props.strophe.sid}</h2>
+        <p className='content-padded content-split _left'>{this.props.strophe.content}</p>
+        <p className='content-padded content-split _right'>{this.props.strophe.trad}</p>
+      </div>
+  );
+  }
+}
+
+class Stropheimg extends React.Component{ // strophe par image
+  render(){
+    return(
+      <div>
+        <h2 className='content-padded clearfix'>{this.props.strophe.sid}</h2>
+        <img src={''+this.props.strophe.content+''} width="400" height='300'/>
+      </div>
+  );
+  }
+}
+
+
 var routes =(
   <Route name="app" path="/" handler={App}>
     <Route name='home' path='/' handler={HomePage}/>
     <Route name='cantique' path="cantique" handler={Cantique}>
-      <Route path="/cantique/:cantiqueId" handler={Cantique}/>
+      <Route path="/cantique/:cantiqueId" handler={Cantique} />
     </Route>
   </Route>
 
